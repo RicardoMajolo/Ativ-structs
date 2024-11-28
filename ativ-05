@@ -1,0 +1,164 @@
+/*
+5-Implemente um programa que armazene os dados de livros usando uma struct chamada ‘livro’, que
+contenha os campos: título (string), autor (string) e ano de publicação (inteiro). O programa deve conter
+um menu com as seguintes opções:
+1. Inserir livro
+2. Listar livros
+3. Pesquisar por título
+4. Pesquisar por autor
+5. Pesquisar por ano de publicação
+Os dados dos livros devem ser armazenados em um vetor alocado de forma dinâmica e as
+funcionalidades de cada opção devem ser implementadas em sub-rotinas (funções ou procedimentos).*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char titulo[100];
+    char autor[100];
+    int ano_publicacao;
+} Livro;
+
+void inserir_livro(Livro **livros, int *qtd_livros) {
+    *livros = realloc(*livros, (*qtd_livros + 1) * sizeof(Livro));
+    if (*livros == NULL) {
+        printf("Erro na alocação de memória.\n");
+        return;
+    }
+    Livro novo_livro;
+
+    printf("\nDigite o título do livro: ");
+    getchar();
+    fgets(novo_livro.titulo, sizeof(novo_livro.titulo), stdin);
+    novo_livro.titulo[strcspn(novo_livro.titulo, "\n")] = 0;
+    printf("Digite o autor do livro: ");
+    fgets(novo_livro.autor, sizeof(novo_livro.autor), stdin);
+    novo_livro.autor[strcspn(novo_livro.autor, "\n")] = 0;
+    printf("Digite o ano de publicação: ");
+    scanf("%d", &novo_livro.ano_publicacao);
+    (*livros)[*qtd_livros] = novo_livro;
+    (*qtd_livros)++;
+    printf("Livro inserido com sucesso!\n");
+}
+
+void listar_livros(Livro *livros, int qtd_livros) {
+    if (qtd_livros == 0) {
+        printf("\nNenhum livro registrado.\n");
+        return;
+    }
+    printf("\nLista de livros:\n");
+    for (int i = 0; i < qtd_livros; i++) {
+        printf("Título: %s\n", livros[i].titulo);
+        printf("Autor: %s\n", livros[i].autor);
+        printf("Ano de Publicação: %d\n", livros[i].ano_publicacao);
+        printf("--------------------------\n");
+    }
+}
+
+void pesquisar_por_titulo(Livro *livros, int qtd_livros) {
+    char titulo_pesquisa[100];
+    printf("\nDigite o título do livro para pesquisa: ");
+    getchar();
+    fgets(titulo_pesquisa, sizeof(titulo_pesquisa), stdin);
+    titulo_pesquisa[strcspn(titulo_pesquisa, "\n")] = 0;
+    int encontrado = 0;
+    for (int i = 0; i < qtd_livros; i++) {
+        if (strstr(livros[i].titulo, titulo_pesquisa) != NULL) {
+            printf("\nLivro encontrado:\n");
+            printf("Título: %s\n", livros[i].titulo);
+            printf("Autor: %s\n", livros[i].autor);
+            printf("Ano de Publicação: %d\n", livros[i].ano_publicacao);
+            printf("--------------------------\n");
+            encontrado = 1;
+        }
+    }
+    if (!encontrado) {
+        printf("\nNenhum livro encontrado com o título \"%s\".\n", titulo_pesquisa);
+    }
+}
+
+void pesquisar_por_autor(Livro *livros, int qtd_livros) {
+    char autor_pesquisa[100];
+    printf("\nDigite o autor para pesquisa: ");
+    getchar();
+    fgets(autor_pesquisa, sizeof(autor_pesquisa), stdin);
+    autor_pesquisa[strcspn(autor_pesquisa, "\n")] = 0;
+    int encontrado = 0;
+    for (int i = 0; i < qtd_livros; i++) {
+        if (strstr(livros[i].autor, autor_pesquisa) != NULL) {
+            printf("\nLivro encontrado:\n");
+            printf("Título: %s\n", livros[i].titulo);
+            printf("Autor: %s\n", livros[i].autor);
+            printf("Ano de Publicação: %d\n", livros[i].ano_publicacao);
+            printf("--------------------------\n");
+            encontrado = 1;
+        }
+    }
+    if (!encontrado) {
+        printf("\nNenhum livro encontrado com o autor \"%s\".\n", autor_pesquisa);
+    }
+}
+
+void pesquisar_por_ano(Livro *livros, int qtd_livros) {
+    int ano_pesquisa;
+    printf("\nDigite o ano de publicação para pesquisa: ");
+    scanf("%d", &ano_pesquisa);
+
+    int encontrado = 0;
+    for (int i = 0; i < qtd_livros; i++) {
+        if (livros[i].ano_publicacao == ano_pesquisa) {
+            printf("\nLivro encontrado:\n");
+            printf("Título: %s\n", livros[i].titulo);
+            printf("Autor: %s\n", livros[i].autor);
+            printf("Ano de Publicação: %d\n", livros[i].ano_publicacao);
+            printf("--------------------------\n");
+            encontrado = 1;
+        }
+    }
+    if (!encontrado) {
+        printf("\nNenhum livro encontrado publicado no ano %d.\n", ano_pesquisa);
+    }
+}
+int main() {
+    Livro *livros = NULL;
+    int qtd_livros = 0;
+    int opcao;
+
+    do {
+        printf("\nMenu:\n");
+        printf("1. Inserir livro\n");
+        printf("2. Listar livros\n");
+        printf("3. Pesquisar por titulo\n");
+        printf("4. Pesquisar por autor\n");
+        printf("5. Pesquisar por ano de publicacao\n");
+        printf("6. Sair\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                inserir_livro(&livros, &qtd_livros);
+                break;
+            case 2:
+                listar_livros(livros, qtd_livros);
+                break;
+            case 3:
+                pesquisar_por_titulo(livros, qtd_livros);
+                break;
+            case 4:
+                pesquisar_por_autor(livros, qtd_livros);
+                break;
+            case 5:
+                pesquisar_por_ano(livros, qtd_livros);
+                break;
+            case 6:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opção inválida!\n");
+        }
+    } while (opcao != 6);
+
+    free(livros);
+    return 0;
+}
