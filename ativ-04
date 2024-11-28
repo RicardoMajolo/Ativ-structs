@@ -1,0 +1,49 @@
+/*
+4- Escreva um programa que contenha duas estruturas: a primeira dela deve se chamar ‘endereco’ e deve
+possuir os seguintes dados: rua, numero, complemento e bairro; a segunda estrutura deve conter os
+seguintes dados de ‘cliente’: nome, data de nascimento e endereço, sendo esta última a estrutura criada
+anteriormente. O programa deve ler os dados de um cliente e apresenta-los na tela.
+*/
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct {
+    char rua[100];
+    int numero;
+    char complemento[50];
+    char bairro[50];
+} Endereco;
+
+typedef struct {
+    char nome[100];
+    char data_nascimento[11];  
+    Endereco endereco;  
+} Cliente;
+
+int main() {
+    Cliente cliente;  
+    printf("Digite o nome do cliente: ");
+    fgets(cliente.nome, sizeof(cliente.nome), stdin); 
+
+    printf("Digite a data de nascimento (dd/mm/aaaa): ");
+    scanf("%s", cliente.data_nascimento);  
+    printf("Digite o nome da rua: ");
+    getchar();  
+    fgets(cliente.endereco.rua, sizeof(cliente.endereco.rua), stdin); 
+    printf("Digite o numero da residência: ");
+    scanf("%d", &cliente.endereco.numero); 
+    printf("Digite o complemento (se houver): ");
+    getchar();  
+    fgets(cliente.endereco.complemento, sizeof(cliente.endereco.complemento), stdin); 
+
+    printf("Digite o bairro: ");
+    fgets(cliente.endereco.bairro, sizeof(cliente.endereco.bairro), stdin);
+    printf("\nDados do Cliente:\n");
+    printf("Nome: %s", cliente.nome);
+    printf("Data de Nascimento: %s\n", cliente.data_nascimento);
+    printf("Endereço: %s", cliente.endereco.rua);
+    printf("Número: %d\n", cliente.endereco.numero);
+    printf("Complemento: %s", cliente.endereco.complemento);
+    printf("Bairro: %s", cliente.endereco.bairro);
+
+    return 0;
+}
